@@ -432,7 +432,7 @@ def main():
     
     # Main content area
     if page == "🏠 Home":
-        st.markdown("## Welcome to Pest Analysis DeskBoard!  🎓")
+        st.markdown("## Welcome to Pest Analysis DeshBoard!  🎓")
         st.markdown("## Designed By Makhan Kumbhkar!  🎓")
         
         col1, col2, col3 = st.columns(3)
@@ -1070,6 +1070,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
