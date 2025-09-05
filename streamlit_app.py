@@ -1004,7 +1004,7 @@ def main():
         """, unsafe_allow_html=True)
     
     elif page == "ℹ️ About":
-        st.markdown("## ℹ️ About Pest ")
+        st.markdown("## ℹ️ Desinged By Makhan Kumbhkar ")
         
         col1, col2 = st.columns(2)
         
@@ -1069,3 +1069,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
