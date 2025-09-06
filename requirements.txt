@@ -8,3 +8,10 @@ openpyxl
 scipy
 streamlit
 plotly
+flask
+werkzeug
+pillow
+opencv-python
+tensorflow
+keras
+requests
