@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Agricultural Management System{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="row mb-5">
+    <div class="col-12">
+        <div class="card bg-primary text-white">
+            <div class="card-body text-center py-5">
+                <h1 class="display-4 mb-3">
+                    <i class="fas fa-seedling me-3"></i>AgriSmart Dashboard
+                </h1>
+                <p class="lead mb-4">Your comprehensive agricultural management solution powered by AI</p>
+                <p class="mb-0">Detect diseases, identify pests, manage weeds, and get expert farming advice</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Stats -->
+<div class="row mb-5">
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <i class="fas fa-virus feature-icon text-danger"></i>
+                <h5 class="card-title">Disease Detection</h5>
+                <p class="card-text">AI-powered plant disease identification</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <i class="fas fa-bug feature-icon text-warning"></i>
+                <h5 class="card-title">Pest Management</h5>
+                <p class="card-text">Identify and control agricultural pests</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <i class="fas fa-leaf feature-icon text-success"></i>
+                <h5 class="card-title">Weed Control</h5>
+                <p class="card-text">Effective weed identification and management</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <i class="fas fa-robot feature-icon text-info"></i>
+                <h5 class="card-title">AI Assistant</h5>
+                <p class="card-text">24/7 agricultural advice and support</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Features -->
+<div class="row">
+    <div class="col-lg-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-virus me-2"></i>Disease Classification
+                </h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">Upload images of your crops to identify diseases and get treatment recommendations.</p>
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-check text-success me-2"></i>Instant disease identification</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Treatment recommendations</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Prevention strategies</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Organic solutions</li>
+                </ul>
+                <a href="{{ url_for('disease_classification') }}" class="btn btn-danger">
+                    <i class="fas fa-camera me-2"></i>Start Detection
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0">
+                    <i class="fas fa-bug me-2"></i>Pest Detection
+                </h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">Identify harmful insects and pests affecting your crops with AI-powered analysis.</p>
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-check text-success me-2"></i>Pest identification</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Damage assessment</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Control methods</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Integrated pest management</li>
+                </ul>
+                <a href="{{ url_for('pest_detection') }}" class="btn btn-warning">
+                    <i class="fas fa-search me-2"></i>Detect Pests
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-leaf me-2"></i>Weed Management
+                </h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">Identify weeds and get comprehensive management strategies for your fields.</p>
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-check text-success me-2"></i>Weed identification</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Impact assessment</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Control strategies</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Prevention methods</li>
+                </ul>
+                <a href="{{ url_for('weed_management') }}" class="btn btn-success">
+                    <i class="fas fa-seedling me-2"></i>Manage Weeds
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-comments me-2"></i>AI Agricultural Assistant
+                </h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">Get instant answers to your farming questions from our intelligent chatbot.</p>
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-check text-success me-2"></i>24/7 availability</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Expert farming advice</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Crop management tips</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Problem-solving support</li>
+                </ul>
+                <a href="{{ url_for('chatbot') }}" class="btn btn-info">
+                    <i class="fas fa-robot me-2"></i>Chat Now
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Advanced Analytics Section -->
+<div class="row mt-5">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-chart-line me-2"></i>Advanced Pest Analytics
+                </h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">Access comprehensive pest population analysis based on historical data and weather patterns.</p>
+                <div class="row">
+                    <div class="col-md-8">
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-chart-bar text-primary me-2"></i>Pest population trends</li>
+                            <li><i class="fas fa-cloud-sun text-primary me-2"></i>Weather correlation analysis</li>
+                            <li><i class="fas fa-calendar-alt text-primary me-2"></i>Seasonal pattern recognition</li>
+                            <li><i class="fas fa-brain text-primary me-2"></i>Predictive modeling</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <a href="{{ url_for('pest_analysis') }}" class="btn btn-primary btn-lg">
+                            <i class="fas fa-analytics me-2"></i>View Analytics
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Tips Section -->
+<div class="row mt-5">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-lightbulb me-2"></i>Quick Farming Tips
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="alert alert-success">
+                            <h6><i class="fas fa-eye me-2"></i>Early Detection</h6>
+                            <small>Regular monitoring of crops helps identify problems before they become severe.</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="alert alert-info">
+                            <h6><i class="fas fa-balance-scale me-2"></i>Integrated Approach</h6>
+                            <small>Combine multiple management strategies for best results in pest and disease control.</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="alert alert-warning">
+                            <h6><i class="fas fa-leaf me-2"></i>Sustainable Practices</h6>
+                            <small>Prioritize organic and environmentally friendly solutions when possible.</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

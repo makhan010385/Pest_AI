@@ -1,0 +1,299 @@
+{% extends "base.html" %}
+
+{% block title %}Disease Classification - Agricultural Management System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card mb-4">
+            <div class="card-header bg-danger text-white">
+                <h3 class="mb-0">
+                    <i class="fas fa-virus me-2"></i>Plant Disease Classification
+                </h3>
+            </div>
+            <div class="card-body">
+                <p class="lead">Upload an image of your plant to identify diseases and get treatment recommendations.</p>
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Tips for best results:</strong> Take clear, well-lit photos focusing on affected areas. Include leaves, stems, or fruits showing symptoms.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-upload me-2"></i>Upload Plant Image
+                </h5>
+            </div>
+            <div class="card-body">
+                <form id="diseaseForm" enctype="multipart/form-data">
+                    <div class="upload-area" id="uploadArea">
+                        <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
+                        <h5>Drag & Drop Image Here</h5>
+                        <p class="text-muted">or click to browse</p>
+                        <input type="file" id="imageInput" name="file" accept="image/*" style="display: none;">
+                        <input type="hidden" name="module" value="disease">
+                    </div>
+                    
+                    <div class="mt-3" id="imagePreview" style="display: none;">
+                        <img id="previewImg" src="" alt="Preview" class="img-fluid rounded" style="max-height: 300px;">
+                        <div class="mt-2">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-search me-2"></i>Analyze Disease
+                            </button>
+                            <button type="button" class="btn btn-secondary" id="clearImage">
+                                <i class="fas fa-times me-2"></i>Clear
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                
+                <div class="loading mt-3" id="loadingDiv">
+                    <div class="text-center">
+                        <div class="spinner-border text-danger" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2">Analyzing image...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-microscope me-2"></i>Analysis Results
+                </h5>
+            </div>
+            <div class="card-body" id="resultsContainer">
+                <div class="text-center text-muted">
+                    <i class="fas fa-image fa-3x mb-3"></i>
+                    <p>Upload an image to see disease analysis results</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Common Diseases Information -->
+<div class="row mt-5">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-book me-2"></i>Common Plant Diseases
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h6 class="card-title text-danger">
+                                    <i class="fas fa-circle me-2"></i>Leaf Blight
+                                </h6>
+                                <p class="card-text small">Brown or black spots on leaves, often with yellow halos. Common in humid conditions.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h6 class="card-title text-warning">
+                                    <i class="fas fa-circle me-2"></i>Powdery Mildew
+                                </h6>
+                                <p class="card-text small">White, powdery coating on leaves and stems. Thrives in warm, dry conditions.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h6 class="card-title text-info">
+                                    <i class="fas fa-circle me-2"></i>Rust Disease
+                                </h6>
+                                <p class="card-text small">Orange or rust-colored spots on leaves. Spreads rapidly in moist conditions.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    const uploadArea = $('#uploadArea');
+    const imageInput = $('#imageInput');
+    const imagePreview = $('#imagePreview');
+    const previewImg = $('#previewImg');
+    const loadingDiv = $('#loadingDiv');
+    const resultsContainer = $('#resultsContainer');
+    const diseaseForm = $('#diseaseForm');
+
+    // Click to upload
+    uploadArea.on('click', function() {
+        imageInput.click();
+    });
+
+    // Drag and drop functionality
+    uploadArea.on('dragover', function(e) {
+        e.preventDefault();
+        $(this).addClass('dragover');
+    });
+
+    uploadArea.on('dragleave', function(e) {
+        e.preventDefault();
+        $(this).removeClass('dragover');
+    });
+
+    uploadArea.on('drop', function(e) {
+        e.preventDefault();
+        $(this).removeClass('dragover');
+        
+        const files = e.originalEvent.dataTransfer.files;
+        if (files.length > 0) {
+            handleFile(files[0]);
+        }
+    });
+
+    // File input change
+    imageInput.on('change', function() {
+        if (this.files && this.files[0]) {
+            handleFile(this.files[0]);
+        }
+    });
+
+    // Handle file selection
+    function handleFile(file) {
+        if (file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewImg.attr('src', e.target.result);
+                imagePreview.show();
+                uploadArea.hide();
+            };
+            reader.readAsDataURL(file);
+        } else {
+            alert('Please select a valid image file.');
+        }
+    }
+
+    // Clear image
+    $('#clearImage').on('click', function() {
+        imageInput.val('');
+        imagePreview.hide();
+        uploadArea.show();
+        resultsContainer.html(`
+            <div class="text-center text-muted">
+                <i class="fas fa-image fa-3x mb-3"></i>
+                <p>Upload an image to see disease analysis results</p>
+            </div>
+        `);
+    });
+
+    // Form submission
+    diseaseForm.on('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        
+        loadingDiv.addClass('show');
+        
+        $.ajax({
+            url: '/upload-image',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                loadingDiv.removeClass('show');
+                displayResults(response);
+            },
+            error: function(xhr) {
+                loadingDiv.removeClass('show');
+                const error = xhr.responseJSON ? xhr.responseJSON.error : 'An error occurred';
+                alert('Error: ' + error);
+            }
+        });
+    });
+
+    function displayResults(data) {
+        const treatment = data.treatment;
+        const confidenceClass = parseFloat(data.confidence) > 80 ? 'success' : 
+                               parseFloat(data.confidence) > 60 ? 'warning' : 'danger';
+        
+        const resultsHtml = `
+            <div class="result-card card">
+                <div class="card-body">
+                    <h6 class="card-title">
+                        <i class="fas fa-diagnosis me-2"></i>Disease Identified
+                    </h6>
+                    <h4 class="text-danger">${data.prediction}</h4>
+                    <div class="mb-3">
+                        <span class="badge bg-${confidenceClass} fs-6">
+                            Confidence: ${data.confidence}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-3">
+                <div class="accordion" id="treatmentAccordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#prevention">
+                                <i class="fas fa-shield-alt me-2"></i>Prevention
+                            </button>
+                        </h2>
+                        <div id="prevention" class="accordion-collapse collapse show" data-bs-parent="#treatmentAccordion">
+                            <div class="accordion-body">
+                                ${treatment.prevention}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#treatment">
+                                <i class="fas fa-pills me-2"></i>Treatment
+                            </button>
+                        </h2>
+                        <div id="treatment" class="accordion-collapse collapse" data-bs-parent="#treatmentAccordion">
+                            <div class="accordion-body">
+                                ${treatment.treatment}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#organic">
+                                <i class="fas fa-leaf me-2"></i>Organic Solutions
+                            </button>
+                        </h2>
+                        <div id="organic" class="accordion-collapse collapse" data-bs-parent="#treatmentAccordion">
+                            <div class="accordion-body">
+                                ${treatment.organic}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        resultsContainer.html(resultsHtml);
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,365 @@
+{% extends "base.html" %}
+
+{% block title %}AI Agricultural Assistant - Agricultural Management System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card mb-4">
+            <div class="card-header bg-info text-white">
+                <h3 class="mb-0">
+                    <i class="fas fa-robot me-2"></i>AI Agricultural Assistant
+                </h3>
+            </div>
+            <div class="card-body">
+                <p class="lead">Get instant expert advice on farming, crop management, and agricultural best practices.</p>
+                <div class="alert alert-info">
+                    <i class="fas fa-lightbulb me-2"></i>
+                    <strong>Ask me about:</strong> Plant diseases, pest control, weed management, fertilization, irrigation, crop rotation, and general farming advice.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-comments me-2"></i>Chat with AgriBot
+                </h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="chat-container" id="chatContainer">
+                    <div class="message bot">
+                        <div class="d-flex align-items-start">
+                            <div class="me-2">
+                                <i class="fas fa-robot fa-lg text-info"></i>
+                            </div>
+                            <div>
+                                <strong>AgriBot</strong>
+                                <p class="mb-1">Hello! I'm your AI agricultural assistant. I'm here to help you with all your farming needs.</p>
+                                <p class="mb-0">You can ask me about plant diseases, pest management, weed control, fertilization, irrigation, and general farming advice. How can I help you today?</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="p-3 border-top">
+                    <form id="chatForm">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="messageInput" placeholder="Ask me anything about farming..." autocomplete="off">
+                            <button type="submit" class="btn btn-info" id="sendButton">
+                                <i class="fas fa-paper-plane me-1"></i>Send
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <div class="loading mt-2" id="loadingDiv">
+                        <div class="d-flex align-items-center">
+                            <div class="spinner-border spinner-border-sm text-info me-2" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <small class="text-muted">AgriBot is thinking...</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-question-circle me-2"></i>Quick Questions
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <button class="btn btn-outline-primary btn-sm quick-question" data-question="What are the signs of plant diseases?">
+                        <i class="fas fa-virus me-1"></i>Disease Signs
+                    </button>
+                    <button class="btn btn-outline-warning btn-sm quick-question" data-question="How do I control aphids organically?">
+                        <i class="fas fa-bug me-1"></i>Pest Control
+                    </button>
+                    <button class="btn btn-outline-success btn-sm quick-question" data-question="What's the best way to manage weeds?">
+                        <i class="fas fa-leaf me-1"></i>Weed Management
+                    </button>
+                    <button class="btn btn-outline-info btn-sm quick-question" data-question="When should I fertilize my crops?">
+                        <i class="fas fa-seedling me-1"></i>Fertilization
+                    </button>
+                    <button class="btn btn-outline-secondary btn-sm quick-question" data-question="How often should I water my plants?">
+                        <i class="fas fa-tint me-1"></i>Watering
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-tools me-2"></i>Quick Tools
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('disease_classification') }}" class="btn btn-danger btn-sm">
+                        <i class="fas fa-camera me-1"></i>Disease Detection
+                    </a>
+                    <a href="{{ url_for('pest_detection') }}" class="btn btn-warning btn-sm">
+                        <i class="fas fa-search me-1"></i>Pest Identification
+                    </a>
+                    <a href="{{ url_for('weed_management') }}" class="btn btn-success btn-sm">
+                        <i class="fas fa-seedling me-1"></i>Weed Control
+                    </a>
+                    <a href="{{ url_for('pest_analysis') }}" class="btn btn-primary btn-sm">
+                        <i class="fas fa-chart-line me-1"></i>Pest Analytics
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-info-circle me-2"></i>Tips & Reminders
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-success alert-sm">
+                    <small><strong>Tip:</strong> Regular monitoring helps catch problems early!</small>
+                </div>
+                <div class="alert alert-warning alert-sm">
+                    <small><strong>Remember:</strong> Always read pesticide labels carefully.</small>
+                </div>
+                <div class="alert alert-info alert-sm">
+                    <small><strong>Advice:</strong> Consider organic solutions first when possible.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Conversation History -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-history me-2"></i>Recent Topics
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 mb-2">
+                        <span class="badge bg-primary">Disease Management</span>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <span class="badge bg-warning">Pest Control</span>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <span class="badge bg-success">Organic Farming</span>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <span class="badge bg-info">Crop Rotation</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    const chatContainer = $('#chatContainer');
+    const messageInput = $('#messageInput');
+    const loadingDiv = $('#loadingDiv');
+    const chatForm = $('#chatForm');
+    const sendButton = $('#sendButton');
+
+    // Auto-scroll to bottom of chat
+    function scrollToBottom() {
+        chatContainer.scrollTop(chatContainer[0].scrollHeight);
+    }
+
+    // Add message to chat
+    function addMessage(message, isUser = false) {
+        const messageClass = isUser ? 'user' : 'bot';
+        const icon = isUser ? '<i class="fas fa-user fa-lg"></i>' : '<i class="fas fa-robot fa-lg text-info"></i>';
+        const sender = isUser ? 'You' : 'AgriBot';
+        
+        let messageHtml = `
+            <div class="message ${messageClass}">
+                <div class="d-flex align-items-start">
+        `;
+        
+        if (!isUser) {
+            messageHtml += `
+                    <div class="me-2">
+                        ${icon}
+                    </div>
+            `;
+        }
+        
+        messageHtml += `
+                    <div class="flex-grow-1">
+                        <strong>${sender}</strong>
+                        <div class="message-content">
+                            ${formatMessage(message)}
+                        </div>
+                    </div>
+        `;
+        
+        if (isUser) {
+            messageHtml += `
+                    <div class="ms-2">
+                        ${icon}
+                    </div>
+            `;
+        }
+        
+        messageHtml += `
+                </div>
+            </div>
+        `;
+        
+        chatContainer.append(messageHtml);
+        scrollToBottom();
+    }
+
+    // Format message with markdown-like styling
+    function formatMessage(message) {
+        if (typeof message === 'object' && message.text) {
+            let formatted = message.text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            formatted = formatted.replace(/\n/g, '<br>');
+            
+            if (message.suggestions && message.suggestions.length > 0) {
+                formatted += '<div class="mt-2">';
+                message.suggestions.forEach(suggestion => {
+                    formatted += `<button class="btn btn-outline-info btn-sm me-1 mb-1 suggestion-btn">${suggestion}</button>`;
+                });
+                formatted += '</div>';
+            }
+            
+            return formatted;
+        }
+        return message.replace(/\n/g, '<br>');
+    }
+
+    // Handle suggestion button clicks
+    $(document).on('click', '.suggestion-btn', function() {
+        const suggestion = $(this).text();
+        messageInput.val(suggestion);
+        sendMessage();
+    });
+
+    // Send message function
+    function sendMessage() {
+        const message = messageInput.val().trim();
+        if (!message) return;
+
+        // Add user message
+        addMessage(message, true);
+        messageInput.val('');
+        
+        // Show loading
+        loadingDiv.addClass('show');
+        sendButton.prop('disabled', true);
+
+        // Send to server
+        $.ajax({
+            url: '/chat',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ message: message }),
+            success: function(response) {
+                loadingDiv.removeClass('show');
+                sendButton.prop('disabled', false);
+                addMessage(response.response);
+                messageInput.focus();
+            },
+            error: function(xhr) {
+                loadingDiv.removeClass('show');
+                sendButton.prop('disabled', false);
+                const error = xhr.responseJSON ? xhr.responseJSON.error : 'Sorry, I encountered an error. Please try again.';
+                addMessage(error);
+                messageInput.focus();
+            }
+        });
+    }
+
+    // Form submission
+    chatForm.on('submit', function(e) {
+        e.preventDefault();
+        sendMessage();
+    });
+
+    // Quick question buttons
+    $('.quick-question').on('click', function() {
+        const question = $(this).data('question');
+        messageInput.val(question);
+        sendMessage();
+    });
+
+    // Enter key to send
+    messageInput.on('keypress', function(e) {
+        if (e.which === 13 && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
+    });
+
+    // Focus on input
+    messageInput.focus();
+
+    // Initial scroll
+    scrollToBottom();
+});
+</script>
+
+<style>
+.alert-sm {
+    padding: 0.375rem 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.alert-sm:last-child {
+    margin-bottom: 0;
+}
+
+.message-content {
+    margin-top: 0.25rem;
+}
+
+.suggestion-btn {
+    font-size: 0.8rem;
+    padding: 0.25rem 0.5rem;
+}
+
+.chat-container {
+    max-height: 500px;
+    min-height: 400px;
+}
+
+.message {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.quick-question, .btn-sm {
+    font-size: 0.875rem;
+}
+
+.card-header h6 {
+    font-weight: 600;
+}
+</style>
+{% endblock %}

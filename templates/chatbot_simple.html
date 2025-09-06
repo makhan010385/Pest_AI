@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistant - AgriSmart</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { background: linear-gradient(135deg, #17a2b8 0%, #6f42c1 100%); min-height: 100vh; }
+        .chat-container { max-height: 500px; overflow-y: auto; }
+        .message { margin-bottom: 15px; }
+        .user-message { text-align: right; }
+        .bot-message { text-align: left; }
+        .message-bubble { display: inline-block; padding: 10px 15px; border-radius: 20px; max-width: 70%; }
+        .user-bubble { background: #007bff; color: white; }
+        .bot-bubble { background: #f8f9fa; color: #333; border: 1px solid #dee2e6; }
+        .card { border: none; border-radius: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+        .quick-question { cursor: pointer; transition: all 0.3s; }
+        .quick-question:hover { background-color: #e9ecef; }
+    </style>
+</head>
+<body>
+    <div class="container py-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <!-- Header -->
+                <div class="text-center text-white mb-4">
+                    <a href="/" class="btn btn-outline-light mb-3">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                    </a>
+                    <h2><i class="fas fa-robot me-2"></i>AI Agricultural Assistant</h2>
+                    <p>Get instant answers to your farming questions</p>
+                </div>
+
+                <!-- Chat Interface -->
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-comments me-2"></i>Chat with AgriBot
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="chatContainer" class="chat-container mb-3">
+                            <div class="message bot-message">
+                                <div class="message-bubble bot-bubble">
+                                    <strong>AgriBot:</strong> Hello! I'm your agricultural assistant. I can help you with plant diseases, pest control, weed management, and general farming advice. What would you like to know?
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <input type="text" id="messageInput" class="form-control" placeholder="Ask me about farming, diseases, pests, or weeds..." onkeypress="handleKeyPress(event)">
+                            <button class="btn btn-info" onclick="sendMessage()">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Questions -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6><i class="fas fa-lightning-bolt me-2"></i>Quick Questions</h6>
+                                <div class="row">
+                                    <div class="col-md-6 mb-2">
+                                        <div class="quick-question p-2 rounded" onclick="askQuestion('How do I identify plant diseases?')">
+                                            <i class="fas fa-virus text-danger me-2"></i>How do I identify plant diseases?
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-2">
+                                        <div class="quick-question p-2 rounded" onclick="askQuestion('What are common pest control methods?')">
+                                            <i class="fas fa-bug text-warning me-2"></i>What are common pest control methods?
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-2">
+                                        <div class="quick-question p-2 rounded" onclick="askQuestion('How often should I water my crops?')">
+                                            <i class="fas fa-tint text-primary me-2"></i>How often should I water my crops?
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-2">
+                                        <div class="quick-question p-2 rounded" onclick="askQuestion('What fertilizer should I use?')">
+                                            <i class="fas fa-seedling text-success me-2"></i>What fertilizer should I use?
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Features -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6><i class="fas fa-info-circle me-2"></i>I can help you with:</h6>
+                                <div class="row text-center">
+                                    <div class="col-md-3">
+                                        <i class="fas fa-stethoscope text-danger fa-2x mb-2"></i>
+                                        <small><strong>Disease Diagnosis</strong><br>Identify plant diseases</small>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <i class="fas fa-shield-alt text-warning fa-2x mb-2"></i>
+                                        <small><strong>Pest Control</strong><br>Manage harmful insects</small>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <i class="fas fa-leaf text-success fa-2x mb-2"></i>
+                                        <small><strong>Weed Management</strong><br>Control unwanted plants</small>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <i class="fas fa-tools text-info fa-2x mb-2"></i>
+                                        <small><strong>Farming Tips</strong><br>General agriculture advice</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function askQuestion(question) {
+            document.getElementById('messageInput').value = question;
+            sendMessage();
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+
+            // Add user message to chat
+            addMessage(message, 'user');
+            input.value = '';
+
+            // Show typing indicator
+            showTyping();
+
+            // Send to backend
+            fetch('/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: message })
+            })
+            .then(response => response.json())
+            .then(data => {
+                hideTyping();
+                if (data.response) {
+                    if (typeof data.response === 'object' && data.response.text) {
+                        addMessage(data.response.text, 'bot');
+                        if (data.response.suggestions) {
+                            addSuggestions(data.response.suggestions);
+                        }
+                    } else {
+                        addMessage(data.response, 'bot');
+                    }
+                } else {
+                    addMessage('Sorry, I encountered an error. Please try again.', 'bot');
+                }
+            })
+            .catch(error => {
+                hideTyping();
+                addMessage('Sorry, I encountered an error. Please try again.', 'bot');
+            });
+        }
+
+        function addMessage(message, sender) {
+            const chatContainer = document.getElementById('chatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}-message`;
+            
+            const bubbleDiv = document.createElement('div');
+            bubbleDiv.className = `message-bubble ${sender}-bubble`;
+            
+            if (sender === 'user') {
+                bubbleDiv.innerHTML = `<strong>You:</strong> ${message}`;
+            } else {
+                bubbleDiv.innerHTML = `<strong>AgriBot:</strong> ${message.replace(/\n/g, '<br>')}`;
+            }
+            
+            messageDiv.appendChild(bubbleDiv);
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function addSuggestions(suggestions) {
+            const chatContainer = document.getElementById('chatContainer');
+            const suggestionsDiv = document.createElement('div');
+            suggestionsDiv.className = 'message bot-message';
+            
+            let suggestionsHtml = '<div class="message-bubble bot-bubble"><small><strong>Quick actions:</strong><br>';
+            suggestions.forEach(suggestion => {
+                suggestionsHtml += `<span class="badge bg-secondary me-1 mb-1" style="cursor: pointer;" onclick="askQuestion('${suggestion}')">${suggestion}</span>`;
+            });
+            suggestionsHtml += '</small></div>';
+            
+            suggestionsDiv.innerHTML = suggestionsHtml;
+            chatContainer.appendChild(suggestionsDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function showTyping() {
+            const chatContainer = document.getElementById('chatContainer');
+            const typingDiv = document.createElement('div');
+            typingDiv.id = 'typing-indicator';
+            typingDiv.className = 'message bot-message';
+            typingDiv.innerHTML = `
+                <div class="message-bubble bot-bubble">
+                    <strong>AgriBot:</strong> <span class="typing-dots">
+                        <span>.</span><span>.</span><span>.</span>
+                    </span>
+                </div>
+            `;
+            chatContainer.appendChild(typingDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function hideTyping() {
+            const typingIndicator = document.getElementById('typing-indicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+
+        // Add CSS for typing animation
+        const style = document.createElement('style');
+        style.textContent = `
+            .typing-dots span {
+                animation: typing 1.4s infinite;
+            }
+            .typing-dots span:nth-child(2) {
+                animation-delay: 0.2s;
+            }
+            .typing-dots span:nth-child(3) {
+                animation-delay: 0.4s;
+            }
+            @keyframes typing {
+                0%, 60%, 100% { opacity: 0; }
+                30% { opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

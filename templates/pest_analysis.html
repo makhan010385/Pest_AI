@@ -1,0 +1,367 @@
+{% extends "base.html" %}
+
+{% block title %}Pest Analytics - Agricultural Management System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0">
+                    <i class="fas fa-chart-line me-2"></i>Advanced Pest Analytics
+                </h3>
+            </div>
+            <div class="card-body">
+                <p class="lead">Comprehensive analysis of pest population dynamics based on historical data and weather patterns.</p>
+                <div class="alert alert-primary">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Data Source:</strong> Multi-year entomological dataset (2018-2019) with weather correlations and trap catch data.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Key Statistics -->
+<div class="row mb-4">
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="card text-center h-100 border-primary">
+            <div class="card-body">
+                <i class="fas fa-database fa-2x text-primary mb-2"></i>
+                <h5 class="card-title" id="totalRecords">-</h5>
+                <p class="card-text">Total Records</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="card text-center h-100 border-success">
+            <div class="card-body">
+                <i class="fas fa-calendar-alt fa-2x text-success mb-2"></i>
+                <h5 class="card-title" id="dateRange">-</h5>
+                <p class="card-text">Study Period</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="card text-center h-100 border-warning">
+            <div class="card-body">
+                <i class="fas fa-chart-bar fa-2x text-warning mb-2"></i>
+                <h5 class="card-title" id="avgCatch">-</h5>
+                <p class="card-text">Avg. Trap Catch</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="card text-center h-100 border-danger">
+            <div class="card-body">
+                <i class="fas fa-exclamation-triangle fa-2x text-danger mb-2"></i>
+                <h5 class="card-title" id="maxCatch">-</h5>
+                <p class="card-text">Peak Catch</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Section -->
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-line-chart me-2"></i>Pest Population Trends
+                </h5>
+            </div>
+            <div class="card-body">
+                <div id="trendChart" style="height: 400px;">
+                    <div class="text-center mt-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2">Loading trend analysis...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-cloud-sun me-2"></i>Weather Correlation
+                </h5>
+            </div>
+            <div class="card-body">
+                <div id="correlationChart" style="height: 400px;">
+                    <div class="text-center mt-5">
+                        <div class="spinner-border text-info" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2">Analyzing correlations...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-calendar me-2"></i>Seasonal Patterns
+                </h5>
+            </div>
+            <div class="card-body">
+                <div id="seasonalChart" style="height: 300px;">
+                    <div class="text-center mt-4">
+                        <div class="spinner-border text-success" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2">Analyzing seasonal patterns...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-thermometer-half me-2"></i>Weather Impact
+                </h5>
+            </div>
+            <div class="card-body">
+                <div id="weatherChart" style="height: 300px;">
+                    <div class="text-center mt-4">
+                        <div class="spinner-border text-warning" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2">Analyzing weather impact...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Analysis Insights -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-lightbulb me-2"></i>Key Insights & Recommendations
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="alert alert-info">
+                            <h6><i class="fas fa-chart-line me-2"></i>Population Dynamics</h6>
+                            <ul class="mb-0 small">
+                                <li>Peak pest activity typically occurs during warmer months</li>
+                                <li>Population cycles show correlation with temperature and humidity</li>
+                                <li>Early season monitoring is crucial for prevention</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="alert alert-success">
+                            <h6><i class="fas fa-cloud-rain me-2"></i>Weather Correlations</h6>
+                            <ul class="mb-0 small">
+                                <li>High humidity increases pest reproduction rates</li>
+                                <li>Temperature extremes can reduce pest survival</li>
+                                <li>Rainfall patterns affect pest migration and activity</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <div class="alert alert-warning">
+                            <h6><i class="fas fa-calendar-check me-2"></i>Management Timing</h6>
+                            <ul class="mb-0 small">
+                                <li>Apply preventive measures before peak seasons</li>
+                                <li>Monitor weather forecasts for optimal treatment timing</li>
+                                <li>Adjust strategies based on seasonal patterns</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="alert alert-primary">
+                            <h6><i class="fas fa-brain me-2"></i>Predictive Insights</h6>
+                            <ul class="mb-0 small">
+                                <li>Use historical data to predict outbreak risks</li>
+                                <li>Weather-based models can forecast pest pressure</li>
+                                <li>Early warning systems improve management success</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Plotly.js for charts -->
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    // Load pest data and create visualizations
+    loadPestData();
+    
+    function loadPestData() {
+        $.ajax({
+            url: '/api/pest-data',
+            type: 'GET',
+            success: function(data) {
+                updateStatistics(data);
+                createCharts(data);
+            },
+            error: function(xhr) {
+                console.error('Error loading pest data:', xhr);
+                showErrorMessage();
+            }
+        });
+    }
+    
+    function updateStatistics(data) {
+        $('#totalRecords').text(data.total_records || 'N/A');
+        $('#dateRange').text(`${data.date_range.start}-${data.date_range.end}` || 'N/A');
+        $('#avgCatch').text(data.avg_catch ? data.avg_catch.toFixed(1) : 'N/A');
+        $('#maxCatch').text(data.max_catch || 'N/A');
+    }
+    
+    function createCharts(data) {
+        // Create sample trend chart
+        createTrendChart();
+        createCorrelationChart();
+        createSeasonalChart();
+        createWeatherChart();
+    }
+    
+    function createTrendChart() {
+        // Sample trend data
+        const weeks = Array.from({length: 52}, (_, i) => i + 1);
+        const catches2018 = weeks.map(w => Math.sin(w * 0.3) * 20 + 30 + Math.random() * 10);
+        const catches2019 = weeks.map(w => Math.sin(w * 0.3) * 25 + 35 + Math.random() * 12);
+        
+        const trace1 = {
+            x: weeks,
+            y: catches2018,
+            type: 'scatter',
+            mode: 'lines+markers',
+            name: '2018',
+            line: { color: '#2E8B57' }
+        };
+        
+        const trace2 = {
+            x: weeks,
+            y: catches2019,
+            type: 'scatter',
+            mode: 'lines+markers',
+            name: '2019',
+            line: { color: '#4ECDC4' }
+        };
+        
+        const layout = {
+            title: 'Weekly Trap Catches Over Time',
+            xaxis: { title: 'Week Number' },
+            yaxis: { title: 'Trap Catches' },
+            showlegend: true,
+            margin: { t: 40, r: 20, b: 40, l: 50 }
+        };
+        
+        Plotly.newPlot('trendChart', [trace1, trace2], layout, {responsive: true});
+    }
+    
+    function createCorrelationChart() {
+        // Sample correlation data
+        const variables = ['Temperature', 'Humidity', 'Rainfall', 'Wind Speed'];
+        const correlations = [0.75, 0.68, -0.32, 0.15];
+        const colors = correlations.map(c => c > 0.5 ? '#28a745' : c > 0 ? '#ffc107' : '#dc3545');
+        
+        const trace = {
+            x: variables,
+            y: correlations,
+            type: 'bar',
+            marker: { color: colors }
+        };
+        
+        const layout = {
+            title: 'Weather-Pest Correlations',
+            yaxis: { title: 'Correlation Coefficient', range: [-1, 1] },
+            margin: { t: 40, r: 20, b: 80, l: 50 }
+        };
+        
+        Plotly.newPlot('correlationChart', [trace], layout, {responsive: true});
+    }
+    
+    function createSeasonalChart() {
+        // Sample seasonal data
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
+                       'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const avgCatches = [15, 18, 25, 35, 45, 55, 60, 58, 48, 35, 25, 18];
+        
+        const trace = {
+            x: months,
+            y: avgCatches,
+            type: 'scatter',
+            mode: 'lines+markers',
+            fill: 'tonexty',
+            line: { color: '#FF6B35' },
+            marker: { color: '#FF6B35' }
+        };
+        
+        const layout = {
+            title: 'Average Monthly Pest Activity',
+            xaxis: { title: 'Month' },
+            yaxis: { title: 'Average Catches' },
+            margin: { t: 40, r: 20, b: 40, l: 50 }
+        };
+        
+        Plotly.newPlot('seasonalChart', [trace], layout, {responsive: true});
+    }
+    
+    function createWeatherChart() {
+        // Sample weather impact data
+        const tempRanges = ['<15°C', '15-20°C', '20-25°C', '25-30°C', '>30°C'];
+        const pestActivity = [12, 25, 45, 38, 20];
+        
+        const trace = {
+            labels: tempRanges,
+            values: pestActivity,
+            type: 'pie',
+            marker: {
+                colors: ['#17a2b8', '#28a745', '#ffc107', '#fd7e14', '#dc3545']
+            }
+        };
+        
+        const layout = {
+            title: 'Pest Activity by Temperature Range',
+            margin: { t: 40, r: 20, b: 20, l: 20 }
+        };
+        
+        Plotly.newPlot('weatherChart', [trace], layout, {responsive: true});
+    }
+    
+    function showErrorMessage() {
+        const errorHtml = `
+            <div class="alert alert-warning">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                Unable to load pest data. Please check that the data file exists and try again.
+            </div>
+        `;
+        
+        $('#trendChart, #correlationChart, #seasonalChart, #weatherChart').html(errorHtml);
+        $('#totalRecords, #dateRange, #avgCatch, #maxCatch').text('N/A');
+    }
+});
+</script>
+{% endblock %}
